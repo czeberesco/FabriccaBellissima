@@ -75,22 +75,21 @@ Assets/Scenes/MainGameScene.unity
 
 The test advances `FactorySimulation.StepOneTick()` directly in a tight loop. It does not use `Time`, frame updates, coroutines, or delays.
 
-From PowerShell, with no other Unity instance holding the project:
+From the repository root, with no other Unity instance holding the project:
 
 ```powershell
-& 'C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe' `
-  -batchmode -nographics `
-  -projectPath 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\FabriccaBellissima' `
-  -runTests -testPlatform EditMode `
-  -testResults 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\unity-test-results.xml' `
-  -logFile 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\unity-tests.log'
+pwsh ./scripts/Run-UnityTests.ps1
+```
 
-& 'C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Unity.exe' `
-  -batchmode -nographics `
-  -projectPath 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\FabriccaBellissima' `
-  -runTests -testPlatform PlayMode `
-  -testResults 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\unity-playmode-results.xml' `
-  -logFile 'C:\Gamedevolay\DataAnnotation\FabriccaBellissima\unity-playmode.log'
+The helper resolves the repository and Unity project relative to its own location, reads the required editor version from `ProjectSettings/ProjectVersion.txt`, and searches the standard Unity Hub installation locations on Windows, macOS, and Linux. Results are written beneath the repository-local `TestResults/` directory.
+
+For a custom Unity installation, either pass the executable explicitly or define `UNITY_EDITOR`:
+
+```powershell
+pwsh ./scripts/Run-UnityTests.ps1 -UnityEditor '/path/to/Unity'
+
+$env:UNITY_EDITOR = '/path/to/Unity'
+pwsh ./scripts/Run-UnityTests.ps1 -TestPlatform PlayMode
 ```
 
 Last verified on 2026-09-23 with Unity `6000.3.10f1`:
