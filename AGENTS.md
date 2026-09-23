@@ -10,9 +10,8 @@
 
 ## Current phase gate
 
-- The repository is currently in the **specification review phase**.
-- Do not implement the factory, edit the Unity project, generate scenes or prefabs, or add tests until the user explicitly approves the specification and asks implementation to begin.
-- During this phase, only `AGENTS.md` and `FACTORY_SPEC.md` may be changed unless the user expressly requests something else.
+- The specification was approved on 2026-09-23 and implementation is authorized.
+- Keep `FACTORY_SPEC.md` synchronized with any later user-approved contract changes.
 
 ## Project facts
 
@@ -57,4 +56,3 @@
 - Add the focused adversarial coverage listed in `FACTORY_SPEC.md`, including intermediate tick-boundary assertions and conservation/identity checks.
 - Run relevant compilation and tests when Unity is available. Report exact commands, results, and any unverified work honestly; code inspection alone is not a passing test.
 - Before handoff, verify that only intended files changed and update the README with startup, controls, layout, units/rounding, tick semantics, and verification status.
-

@@ -1,0 +1,14 @@
+{
+  "name": "FabriccaBellissima.Factory",
+  "rootNamespace": "FabriccaBellissima.Factory",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

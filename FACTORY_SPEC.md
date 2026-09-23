@@ -1,6 +1,6 @@
 # Factory Simulation Specification
 
-Status: **Draft for user review — implementation is not authorized yet.**
+Status: **Approved for implementation on 2026-09-23.**
 
 This document captures the authoritative requirements for the MonoBehaviour reference factory. It is derived from the supplied `Unity_Factory_MonoBehaviour_Prompt.txt`, treated as specification input rather than an instruction to implement during the current review phase.
 
@@ -267,7 +267,7 @@ Keep scenario loading and canonical state extraction behind a small implementati
 
 Use a deterministic, versioned JSON-compatible data model containing:
 
-- format version and tick duration;
+- format version and exact integer tick duration in microseconds (default `50,000`);
 - stable nodes and ports, sorted by ID;
 - explicit connections;
 - node type, enabled initial state, and all converted integer configuration;
@@ -282,7 +282,7 @@ Serialized JSON field/array ordering is canonical. Loading validates all IDs, co
 
 The canonical snapshot includes every value capable of affecting future behavior:
 
-- format version, tick index, run/paused state where relevant, and next item ID;
+- format version, tick index, integer tick duration in microseconds, run/paused state where relevant, and next item ID;
 - node/port IDs and enabled states;
 - complete item records, stable IDs, resource, color/charges, and exact owner/slot;
 - extractor work and pending output;
@@ -348,4 +348,3 @@ Implementation is complete only when the repository contains:
 - a concise README covering startup, controls, file layout, tick/transfer boundary semantics, configuration units/rounding, generator steps if any, and honest verification status.
 
 Run available Unity compilation/tests, fix discovered failures, and report exact verification. If Unity cannot run in the execution environment, identify precisely what remains unverified and give the exact batch command or Editor steps needed. Code inspection alone must never be reported as successful verification.
-

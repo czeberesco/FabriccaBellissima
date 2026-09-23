@@ -1,0 +1,434 @@
+{
+    "formatVersion": 1,
+    "tickDurationMicroseconds": 50000,
+    "initialTick": 0,
+    "nextItemId": 1,
+    "nodes": [
+        {
+            "nodeId": 10,
+            "displayName": "IRON EXTRACTOR",
+            "kind": 0,
+            "enabled": true,
+            "resource": 1,
+            "colorId": "Blue",
+            "durationTicks": 40,
+            "paintCanCharges": 0,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 4.0
+            },
+            "beltStart": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 4.0
+            },
+            "beltEnd": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 4.0
+            }
+        },
+        {
+            "nodeId": 20,
+            "displayName": "ORE BELT",
+            "kind": 1,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 4000,
+            "movementPerTick": 50,
+            "capacity": 4,
+            "spacingUnits": 1000,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": -5.0,
+                "y": 0.4000000059604645,
+                "z": 4.0
+            },
+            "beltStart": {
+                "x": -7.0,
+                "y": 0.4000000059604645,
+                "z": 4.0
+            },
+            "beltEnd": {
+                "x": -3.0,
+                "y": 0.4000000059604645,
+                "z": 4.0
+            }
+        },
+        {
+            "nodeId": 30,
+            "displayName": "COAL EXTRACTOR",
+            "kind": 0,
+            "enabled": true,
+            "resource": 2,
+            "colorId": "Blue",
+            "durationTicks": 120,
+            "paintCanCharges": 0,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 0.0
+            },
+            "beltStart": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 0.0
+            },
+            "beltEnd": {
+                "x": -9.0,
+                "y": 0.5,
+                "z": 0.0
+            }
+        },
+        {
+            "nodeId": 40,
+            "displayName": "COAL BELT",
+            "kind": 1,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 4000,
+            "movementPerTick": 50,
+            "capacity": 4,
+            "spacingUnits": 1000,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": -5.0,
+                "y": 0.4000000059604645,
+                "z": 0.0
+            },
+            "beltStart": {
+                "x": -7.0,
+                "y": 0.4000000059604645,
+                "z": 0.0
+            },
+            "beltEnd": {
+                "x": -3.0,
+                "y": 0.4000000059604645,
+                "z": 0.0
+            }
+        },
+        {
+            "nodeId": 50,
+            "displayName": "FURNACE",
+            "kind": 2,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 160,
+            "smeltTicks": 40,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": -1.0,
+                "y": 0.699999988079071,
+                "z": 2.0
+            },
+            "beltStart": {
+                "x": -1.0,
+                "y": 0.699999988079071,
+                "z": 2.0
+            },
+            "beltEnd": {
+                "x": -1.0,
+                "y": 0.699999988079071,
+                "z": 2.0
+            }
+        },
+        {
+            "nodeId": 60,
+            "displayName": "BAR BELT",
+            "kind": 1,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 4000,
+            "movementPerTick": 50,
+            "capacity": 4,
+            "spacingUnits": 1000,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": 3.0,
+                "y": 0.4000000059604645,
+                "z": 2.0
+            },
+            "beltStart": {
+                "x": 1.0,
+                "y": 0.4000000059604645,
+                "z": 2.0
+            },
+            "beltEnd": {
+                "x": 5.0,
+                "y": 0.4000000059604645,
+                "z": 2.0
+            }
+        },
+        {
+            "nodeId": 70,
+            "displayName": "PAINT EXTRACTOR",
+            "kind": 0,
+            "enabled": true,
+            "resource": 3,
+            "colorId": "Blue",
+            "durationTicks": 80,
+            "paintCanCharges": 3,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": -3.0
+            },
+            "beltStart": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": -3.0
+            },
+            "beltEnd": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": -3.0
+            }
+        },
+        {
+            "nodeId": 80,
+            "displayName": "PAINT BELT",
+            "kind": 1,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 4000,
+            "movementPerTick": 50,
+            "capacity": 4,
+            "spacingUnits": 1000,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": 5.0,
+                "y": 0.4000000059604645,
+                "z": -3.0
+            },
+            "beltStart": {
+                "x": 3.0,
+                "y": 0.4000000059604645,
+                "z": -3.0
+            },
+            "beltEnd": {
+                "x": 7.0,
+                "y": 0.4000000059604645,
+                "z": -3.0
+            }
+        },
+        {
+            "nodeId": 90,
+            "displayName": "COLORING STATION",
+            "kind": 3,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 15,
+            "chargesPerBar": 2,
+            "position": {
+                "x": 7.0,
+                "y": 0.699999988079071,
+                "z": 1.0
+            },
+            "beltStart": {
+                "x": 7.0,
+                "y": 0.699999988079071,
+                "z": 1.0
+            },
+            "beltEnd": {
+                "x": 7.0,
+                "y": 0.699999988079071,
+                "z": 1.0
+            }
+        },
+        {
+            "nodeId": 100,
+            "displayName": "OUTPUT BELT",
+            "kind": 1,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 4000,
+            "movementPerTick": 50,
+            "capacity": 4,
+            "spacingUnits": 1000,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": 11.0,
+                "y": 0.4000000059604645,
+                "z": 1.0
+            },
+            "beltStart": {
+                "x": 9.0,
+                "y": 0.4000000059604645,
+                "z": 1.0
+            },
+            "beltEnd": {
+                "x": 13.0,
+                "y": 0.4000000059604645,
+                "z": 1.0
+            }
+        },
+        {
+            "nodeId": 110,
+            "displayName": "TERMINATION SINK",
+            "kind": 4,
+            "enabled": true,
+            "resource": 0,
+            "colorId": "Blue",
+            "durationTicks": 0,
+            "paintCanCharges": 0,
+            "lengthUnits": 0,
+            "movementPerTick": 0,
+            "capacity": 0,
+            "spacingUnits": 0,
+            "burnTicks": 0,
+            "smeltTicks": 0,
+            "sprayTicks": 0,
+            "chargesPerBar": 0,
+            "position": {
+                "x": 15.0,
+                "y": 0.6000000238418579,
+                "z": 1.0
+            },
+            "beltStart": {
+                "x": 15.0,
+                "y": 0.6000000238418579,
+                "z": 1.0
+            },
+            "beltEnd": {
+                "x": 15.0,
+                "y": 0.6000000238418579,
+                "z": 1.0
+            }
+        }
+    ],
+    "connections": [
+        {
+            "sourceNodeId": 10,
+            "sourcePortId": 20,
+            "destinationNodeId": 20,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 20,
+            "sourcePortId": 20,
+            "destinationNodeId": 50,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 30,
+            "sourcePortId": 20,
+            "destinationNodeId": 40,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 40,
+            "sourcePortId": 20,
+            "destinationNodeId": 50,
+            "destinationPortId": 20
+        },
+        {
+            "sourceNodeId": 50,
+            "sourcePortId": 30,
+            "destinationNodeId": 60,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 60,
+            "sourcePortId": 20,
+            "destinationNodeId": 90,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 70,
+            "sourcePortId": 20,
+            "destinationNodeId": 80,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 80,
+            "sourcePortId": 20,
+            "destinationNodeId": 90,
+            "destinationPortId": 20
+        },
+        {
+            "sourceNodeId": 90,
+            "sourcePortId": 30,
+            "destinationNodeId": 100,
+            "destinationPortId": 10
+        },
+        {
+            "sourceNodeId": 100,
+            "sourcePortId": 20,
+            "destinationNodeId": 110,
+            "destinationPortId": 10
+        }
+    ],
+    "initialStates": []
+}
