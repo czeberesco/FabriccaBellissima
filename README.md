@@ -61,6 +61,20 @@ Assets/Scenes/MainGameScene.unity
 
 ## Verification
 
+### Runtime determinism soak
+
+`FactoryDeterminismRuntimeTests` executes five scenarios for 10,000 ticks, 100 times each. Scheduled changes are applied immediately before the named tick's local-update phase. Each rerun must match the first run's exact final canonical JSON and a SHA-256 trace containing every logical event, every toggle, and full-state checkpoints every 250 ticks.
+
+| Scenario | Predefined node outages (`off-on` ticks) |
+|---|---|
+| Uninterrupted baseline | None |
+| Core machines | Iron extractor `400-900`; furnace `2200-2900`; coloring station `5100-5900` |
+| Supply and output | Coal extractor `600-1300`; coal belt `1800-2400`; paint extractor `3600-4700`; output belt `7200-8100` |
+| Transport and sink | Ore belt `500-1050`; furnace `1700-2300`; bar belt `3100-3900`; paint belt `4800-5650`; sink `7000-8350` |
+| Overlapping outage | Iron extractor `300-1200`; coal extractor `450-1750`; coal belt `800-2100`; paint extractor `1500-3300`; coloring station `2600-5200`; output belt `4100-6400` |
+
+The test advances `FactorySimulation.StepOneTick()` directly in a tight loop. It does not use `Time`, frame updates, coroutines, or delays.
+
 From PowerShell, with no other Unity instance holding the project:
 
 ```powershell
@@ -82,7 +96,7 @@ From PowerShell, with no other Unity instance holding the project:
 Last verified on 2026-09-23 with Unity `6000.3.10f1`:
 
 - EditMode: 16 passed, 0 failed.
-- PlayMode: 1 passed, 0 failed.
+- PlayMode: 2 passed, 0 failed. This includes five deterministic 10,000-tick scenarios run 100 times each (5,000,000 total ticks), with scheduled three-to-six-node outages and exact canonical-state/trace comparison.
 - Demo generation: completed successfully and saved the scene/prefabs/materials.
 
 When Unity is launched by a sandboxed automation agent, it must be allowed to run outside filesystem isolation so its Licensing Client, Package Manager, and AppData databases can operate. The Unity executable remains scoped to this project path.
