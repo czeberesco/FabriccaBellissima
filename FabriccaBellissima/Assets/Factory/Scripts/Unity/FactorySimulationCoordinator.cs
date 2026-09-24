@@ -26,6 +26,7 @@ namespace FabriccaBellissima.Factory
         public float SimulationSpeed => _simulationSpeed;
         public FactorySnapshot CurrentSnapshot => _simulation?.CurrentSnapshot;
         public IReadOnlyList<FactoryNodeConfig> NodeConfigs => _simulation?.NodeConfigs;
+        public IReadOnlyList<FactoryNodeLayout> NodeLayouts => _authoring?.NodeLayouts;
         public Observable<FactorySnapshot> Snapshots => _snapshots;
         public string InitializationError => _initializationError;
 

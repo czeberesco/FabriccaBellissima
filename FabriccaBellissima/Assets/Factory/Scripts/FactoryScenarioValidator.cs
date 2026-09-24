@@ -33,6 +33,10 @@ namespace FabriccaBellissima.Factory
                 FactoryNodeConfig config = scenario.nodes[index];
                 if (config == null || config.nodeId <= 0 || !ids.Add(config.nodeId))
                     throw new ArgumentException("Node IDs must be positive and unique.");
+                if (config.configurationVersion != 1)
+                    throw new ArgumentException($"Node {config.nodeId} has unsupported configuration version {config.configurationVersion}.");
+                if (string.IsNullOrWhiteSpace(config.displayName))
+                    throw new ArgumentException($"Node {config.nodeId} needs a display name.");
                 _registry.Validate(config);
                 nodes.Add(config.nodeId, _registry.Create(config));
             }
@@ -83,10 +87,13 @@ namespace FabriccaBellissima.Factory
                     maximumId = Math.Max(maximumId, item.id);
                 }
                 FactoryNodeConfig config = scenario.nodes.First(node => node.nodeId == state.nodeId);
-                if (config.kind == FactoryNodeKind.Conveyor && state.beltItems.Count > config.capacity)
-                    throw new ArgumentException($"Initial belt {state.nodeId} exceeds capacity.");
-                if (state.beltItems.Any(item => item.progressUnits < 0 || item.progressUnits > config.lengthUnits))
-                    throw new ArgumentException($"Initial belt {state.nodeId} progress is out of range.");
+                if (config is ConveyorNodeConfig conveyor)
+                {
+                    if (state.beltItems.Count > conveyor.capacity)
+                        throw new ArgumentException($"Initial belt {state.nodeId} exceeds capacity.");
+                    if (state.beltItems.Any(item => item.progressUnits < 0 || item.progressUnits > conveyor.lengthUnits))
+                        throw new ArgumentException($"Initial belt {state.nodeId} progress is out of range.");
+                }
             }
             if (scenario.nextItemId <= maximumId)
                 throw new ArgumentException("Next item ID must be greater than every initial item ID.");

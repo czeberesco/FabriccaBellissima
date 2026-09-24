@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class ConveyorNode : FactoryNodeBase
+    public sealed class ConveyorNode : FactoryNodeBase<ConveyorNodeConfig>
     {
         private readonly List<FactoryBeltItem> _items = new List<FactoryBeltItem>();
 
-        public ConveyorNode(FactoryNodeConfig config) : base(config) { }
+        public ConveyorNode(ConveyorNodeConfig config) : base(config) { }
 
         public override void LocalUpdate(FactoryTickContext context)
         {
@@ -66,6 +66,10 @@ namespace FabriccaBellissima.Factory
                 _items[0].progressUnits >= Config.lengthUnits ? "Exit blocked" :
                 $"Moving {_items.Count}/{Config.capacity}";
             FactoryNodeSnapshot snapshot = CreateCommonSnapshot(status);
+            snapshot.lengthUnits = Config.lengthUnits;
+            snapshot.movementPerTick = Config.movementPerTick;
+            snapshot.capacity = Config.capacity;
+            snapshot.spacingUnits = Config.spacingUnits;
             for (int index = 0; index < _items.Count; index++) snapshot.beltItems.Add(_items[index].Clone());
             return snapshot;
         }

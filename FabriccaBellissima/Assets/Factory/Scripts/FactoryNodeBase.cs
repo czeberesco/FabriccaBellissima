@@ -3,15 +3,16 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public abstract class FactoryNodeBase : IFactoryNode
+    public abstract class FactoryNodeBase<TConfig> : IFactoryNode where TConfig : FactoryNodeConfig
     {
-        protected FactoryNodeBase(FactoryNodeConfig config)
+        protected FactoryNodeBase(TConfig config)
         {
             Config = config ?? throw new ArgumentNullException(nameof(config));
             Enabled = config.enabled;
         }
 
-        public FactoryNodeConfig Config { get; }
+        public TConfig Config { get; }
+        FactoryNodeConfig IFactoryNode.Config => Config;
         public int NodeId => Config.nodeId;
         public bool Enabled { get; set; }
 
@@ -34,18 +35,7 @@ namespace FabriccaBellissima.Factory
                 displayName = Config.displayName,
                 kind = Config.kind,
                 enabled = Enabled,
-                status = Enabled ? status : "Disabled",
-                configuredResource = Config.resource,
-                configuredColorId = Config.colorId,
-                durationTicks = Config.durationTicks,
-                paintCanCharges = Config.paintCanCharges,
-                burnTicks = Config.burnTicks,
-                chargesPerBar = Config.chargesPerBar,
-                sprayTicks = Config.sprayTicks,
-                lengthUnits = Config.lengthUnits,
-                movementPerTick = Config.movementPerTick,
-                capacity = Config.capacity,
-                spacingUnits = Config.spacingUnits
+                status = Enabled ? status : "Disabled"
             };
         }
 

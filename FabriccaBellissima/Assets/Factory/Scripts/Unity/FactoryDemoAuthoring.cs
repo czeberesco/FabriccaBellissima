@@ -104,35 +104,27 @@ namespace FabriccaBellissima.Factory
             scenario.nodes.Add(Extractor(30, "COAL EXTRACTOR", FactoryResourceType.Coal,
                 ToTicks(_coalExtractionSeconds), 0));
             scenario.nodes.Add(Belt(40, "COAL BELT", beltLength, movement, spacing));
-            scenario.nodes.Add(new FactoryNodeConfig
+            scenario.nodes.Add(new FurnaceNodeConfig
             {
-                nodeId = 50, displayName = "FURNACE", kind = FactoryNodeKind.Furnace, enabled = true,
+                nodeId = 50, displayName = "FURNACE", enabled = true,
                 burnTicks = ToTicks(_coalBurnSeconds), smeltTicks = ToTicks(_furnaceProcessingSeconds)
             });
             scenario.nodes.Add(Belt(60, "BAR BELT", beltLength, movement, spacing));
             scenario.nodes.Add(Extractor(70, "PAINT EXTRACTOR", FactoryResourceType.PaintCan,
                 ToTicks(_paintExtractionSeconds), _chargesPerCan));
             scenario.nodes.Add(Belt(80, "PAINT BELT", beltLength, movement, spacing));
-            scenario.nodes.Add(new FactoryNodeConfig
+            scenario.nodes.Add(new ColoringStationNodeConfig
             {
-                nodeId = 90, displayName = "COLORING STATION", kind = FactoryNodeKind.ColoringStation,
+                nodeId = 90, displayName = "COLORING STATION",
                 enabled = true, colorId = _paintColorId, sprayTicks = ToTicks(_spraySecondsPerCharge),
                 chargesPerBar = _chargesPerBar
             });
             scenario.nodes.Add(Belt(100, "OUTPUT BELT", beltLength, movement, spacing));
-            scenario.nodes.Add(new FactoryNodeConfig
+            scenario.nodes.Add(new SinkNodeConfig
             {
-                nodeId = 110, displayName = "TERMINATION SINK", kind = FactoryNodeKind.Sink, enabled = true
+                nodeId = 110, displayName = "TERMINATION SINK", enabled = true,
+                acceptedColorId = _paintColorId
             });
-
-            var layoutById = _nodeLayouts.ToDictionary(layout => layout.nodeId);
-            foreach (FactoryNodeConfig node in scenario.nodes)
-            {
-                FactoryNodeLayout layout = layoutById[node.nodeId];
-                node.position = layout.position;
-                node.beltStart = layout.beltStart;
-                node.beltEnd = layout.beltEnd;
-            }
 
             scenario.connections.AddRange(_connections.Select(connection => new FactoryConnection
             {
@@ -144,22 +136,22 @@ namespace FabriccaBellissima.Factory
             return scenario;
         }
 
-        private FactoryNodeConfig Extractor(int id, string displayName, FactoryResourceType resource,
+        private ExtractorNodeConfig Extractor(int id, string displayName, FactoryResourceType resource,
             int duration, int canCharges)
         {
-            return new FactoryNodeConfig
+            return new ExtractorNodeConfig
             {
-                nodeId = id, displayName = displayName, kind = FactoryNodeKind.Extractor, enabled = true,
+                nodeId = id, displayName = displayName, enabled = true,
                 resource = resource, durationTicks = duration, colorId = _paintColorId,
                 paintCanCharges = canCharges
             };
         }
 
-        private FactoryNodeConfig Belt(int id, string displayName, int length, int movement, int spacing)
+        private ConveyorNodeConfig Belt(int id, string displayName, int length, int movement, int spacing)
         {
-            return new FactoryNodeConfig
+            return new ConveyorNodeConfig
             {
-                nodeId = id, displayName = displayName, kind = FactoryNodeKind.Conveyor, enabled = true,
+                nodeId = id, displayName = displayName, enabled = true,
                 lengthUnits = length, movementPerTick = movement, capacity = _beltCapacity,
                 spacingUnits = spacing
             };

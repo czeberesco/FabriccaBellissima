@@ -12,6 +12,7 @@ namespace FabriccaBellissima.Factory
         [SerializeField] private bool _showWorldLabels = true;
 
         private readonly Dictionary<int, FactoryNodeConfig> _configs = new Dictionary<int, FactoryNodeConfig>();
+        private readonly Dictionary<int, FactoryNodeLayout> _layouts = new Dictionary<int, FactoryNodeLayout>();
         private readonly Dictionary<int, TextMesh> _labels = new Dictionary<int, TextMesh>();
         private readonly Dictionary<int, Renderer> _machineRenderers = new Dictionary<int, Renderer>();
         private readonly Dictionary<int, Renderer> _beaconRenderers = new Dictionary<int, Renderer>();
@@ -52,22 +53,26 @@ namespace FabriccaBellissima.Factory
             _machineMaterial = CreateMaterial("Machine", new Color(0.18f, 0.28f, 0.35f));
             _beltMaterial = CreateMaterial("Belt", new Color(0.08f, 0.1f, 0.12f));
 
+            foreach (FactoryNodeLayout layout in _controller.NodeLayouts)
+                _layouts.Add(layout.nodeId, layout);
+
             foreach (FactoryNodeConfig config in _controller.NodeConfigs)
             {
                 _configs.Add(config.nodeId, config);
-                if (config.kind == FactoryNodeKind.Conveyor) CreateBelt(config);
-                else CreateMachine(config);
-                if (_showWorldLabels) CreateLabel(config);
+                FactoryNodeLayout layout = _layouts[config.nodeId];
+                if (config.kind == FactoryNodeKind.Conveyor) CreateBelt(config, layout);
+                else CreateMachine(config, layout);
+                if (_showWorldLabels) CreateLabel(config, layout);
             }
         }
 
-        private void CreateMachine(FactoryNodeConfig config)
+        private void CreateMachine(FactoryNodeConfig config, FactoryNodeLayout layout)
         {
             GameObject machine = GameObject.CreatePrimitive(config.kind == FactoryNodeKind.Sink
                 ? PrimitiveType.Cylinder : PrimitiveType.Cube);
             machine.name = config.displayName;
             machine.transform.SetParent(_visualRoot, false);
-            machine.transform.position = config.position;
+            machine.transform.position = layout.position;
             machine.transform.localScale = config.kind == FactoryNodeKind.Sink
                 ? new Vector3(1.4f, 0.7f, 1.4f)
                 : new Vector3(2.2f, 1.4f, 2.2f);
@@ -85,13 +90,13 @@ namespace FabriccaBellissima.Factory
             _beaconRenderers.Add(config.nodeId, beaconRenderer);
         }
 
-        private void CreateBelt(FactoryNodeConfig config)
+        private void CreateBelt(FactoryNodeConfig config, FactoryNodeLayout layout)
         {
-            Vector3 delta = config.beltEnd - config.beltStart;
+            Vector3 delta = layout.beltEnd - layout.beltStart;
             GameObject belt = GameObject.CreatePrimitive(PrimitiveType.Cube);
             belt.name = config.displayName;
             belt.transform.SetParent(_visualRoot, false);
-            belt.transform.position = (config.beltStart + config.beltEnd) * 0.5f;
+            belt.transform.position = (layout.beltStart + layout.beltEnd) * 0.5f;
             belt.transform.localScale = new Vector3(0.9f, 0.18f, delta.magnitude);
             belt.transform.rotation = Quaternion.LookRotation(delta.normalized, Vector3.up);
             belt.GetComponent<Renderer>().sharedMaterial = _beltMaterial;
@@ -102,18 +107,18 @@ namespace FabriccaBellissima.Factory
                 GameObject arrow = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 arrow.name = "Direction marker";
                 arrow.transform.SetParent(_visualRoot, false);
-                arrow.transform.position = Vector3.Lerp(config.beltStart, config.beltEnd, t) + Vector3.up * 0.16f;
+                arrow.transform.position = Vector3.Lerp(layout.beltStart, layout.beltEnd, t) + Vector3.up * 0.16f;
                 arrow.transform.localScale = new Vector3(0.45f, 0.05f, 0.12f);
                 arrow.transform.rotation = Quaternion.LookRotation(delta.normalized, Vector3.up);
                 arrow.GetComponent<Renderer>().sharedMaterial = CreateMaterial("Arrow", new Color(1f, 0.65f, 0.08f));
             }
         }
 
-        private void CreateLabel(FactoryNodeConfig config)
+        private void CreateLabel(FactoryNodeConfig config, FactoryNodeLayout layout)
         {
             var labelObject = new GameObject(config.displayName + " Label");
             labelObject.transform.SetParent(_visualRoot, false);
-            labelObject.transform.position = config.position + Vector3.up *
+            labelObject.transform.position = layout.position + Vector3.up *
                 (config.kind == FactoryNodeKind.Conveyor ? 1.2f : 2f);
             labelObject.transform.rotation = Quaternion.Euler(65f, 0f, 0f);
             TextMesh text = labelObject.AddComponent<TextMesh>();
@@ -134,6 +139,7 @@ namespace FabriccaBellissima.Factory
             foreach (FactoryNodeSnapshot node in snapshot.nodes)
             {
                 FactoryNodeConfig config = _configs[node.nodeId];
+                FactoryNodeLayout layout = _layouts[node.nodeId];
                 if (_labels.TryGetValue(node.nodeId, out TextMesh label))
                     label.text = BuildWorldLabel(node);
                 if (_machineRenderers.TryGetValue(node.nodeId, out Renderer renderer))
@@ -151,17 +157,17 @@ namespace FabriccaBellissima.Factory
                 }
 
                 if (node.outputItem != null)
-                    PlaceItem(node.outputItem, config.position + new Vector3(1.2f, 1.05f, 0f), node, visibleIds);
+                    PlaceItem(node.outputItem, layout.position + new Vector3(1.2f, 1.05f, 0f), node, visibleIds);
                 if (node.workItem != null)
-                    PlaceItem(node.workItem, config.position + new Vector3(0f, 1.2f, 0f), node, visibleIds);
+                    PlaceItem(node.workItem, layout.position + new Vector3(0f, 1.2f, 0f), node, visibleIds);
                 if (node.waitingCoal != null)
-                    PlaceItem(node.waitingCoal, config.position + new Vector3(-0.65f, 1.05f, -0.65f), node, visibleIds);
+                    PlaceItem(node.waitingCoal, layout.position + new Vector3(-0.65f, 1.05f, -0.65f), node, visibleIds);
                 if (node.waitingCan != null)
-                    PlaceItem(node.waitingCan, config.position + new Vector3(-0.65f, 1.05f, 0.65f), node, visibleIds);
+                    PlaceItem(node.waitingCan, layout.position + new Vector3(-0.65f, 1.05f, 0.65f), node, visibleIds);
                 foreach (FactoryBeltItem beltItem in node.beltItems)
                 {
                     float progress = node.lengthUnits == 0 ? 0f : beltItem.progressUnits / (float)node.lengthUnits;
-                    Vector3 position = Vector3.Lerp(config.beltStart, config.beltEnd, progress) + Vector3.up * 0.45f;
+                    Vector3 position = Vector3.Lerp(layout.beltStart, layout.beltEnd, progress) + Vector3.up * 0.45f;
                     PlaceItem(beltItem.item, position, node, visibleIds);
                 }
             }

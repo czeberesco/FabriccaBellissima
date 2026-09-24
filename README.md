@@ -42,7 +42,11 @@ Reset restores tick zero, node enabled states, ownership, timers, counters, sink
 
 - Inspector authoring: `FactoryDemoAuthoring` on the `Factory Systems` object.
 - Portable default config: `Assets/Factory/Generated/DefaultScenario.json`.
-- Runtime config type: `FactoryScenario`.
+- Runtime scenario type: `FactoryScenario`. Its node list uses a stable `FactoryNodeConfig`
+  identity envelope and concrete `ExtractorNodeConfig`, `ConveyorNodeConfig`,
+  `FurnaceNodeConfig`, `ColoringStationNodeConfig`, and `SinkNodeConfig` payloads.
+  A node only carries settings used by its own behavior; Unity positions remain in
+  the separate `FactoryNodeLayout` presentation model.
 - Neutral simulation API: `IFactorySimulation`.
 - Snapshot export: `FactorySimulationCoordinator.ExportCanonicalSnapshot()`.
 

@@ -2,11 +2,11 @@ using System;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class ExtractorNodeFactory : IFactoryNodeFactory
+    public sealed class ExtractorNodeFactory : FactoryNodeFactory<ExtractorNodeConfig>
     {
-        public FactoryNodeKind Kind => FactoryNodeKind.Extractor;
+        public override FactoryNodeKind Kind => FactoryNodeKind.Extractor;
 
-        public void Validate(FactoryNodeConfig config)
+        protected override void Validate(ExtractorNodeConfig config)
         {
             if (config.durationTicks <= 0)
                 throw new ArgumentException($"Extractor {config.nodeId} duration must be positive.");
@@ -18,6 +18,6 @@ namespace FabriccaBellissima.Factory
                 throw new ArgumentException($"Paint extractor {config.nodeId} needs charges and a color.");
         }
 
-        public IFactoryNode Create(FactoryNodeConfig config) => new ExtractorNode(config);
+        protected override IFactoryNode Create(ExtractorNodeConfig config) => new ExtractorNode(config);
     }
 }

@@ -1,10 +1,10 @@
 namespace FabriccaBellissima.Factory.Tests
 {
-    public sealed class TestNodeFactory : IFactoryNodeFactory
+    public sealed class TestNodeFactory : FactoryNodeFactory<TestNodeConfig>
     {
         public const FactoryNodeKind TestKind = (FactoryNodeKind)999;
-        public FactoryNodeKind Kind => TestKind;
-        public void Validate(FactoryNodeConfig config) { }
-        public IFactoryNode Create(FactoryNodeConfig config) => new TestNode(config);
+        public override FactoryNodeKind Kind => TestKind;
+        protected override void Validate(TestNodeConfig config) { }
+        protected override IFactoryNode Create(TestNodeConfig config) => new TestNode(config);
     }
 }

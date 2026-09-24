@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory.Tests
 {
-    public sealed class TestNode : FactoryNodeBase
+    public sealed class TestNode : FactoryNodeBase<TestNodeConfig>
     {
         private int _ticks;
 
-        public TestNode(FactoryNodeConfig config) : base(config) { }
+        public TestNode(TestNodeConfig config) : base(config) { }
         public override void LocalUpdate(FactoryTickContext context) { if (Enabled) _ticks++; }
         public override bool TryGetOutput(out FactoryOutputProposal proposal) { proposal = default; return false; }
         public override bool CanAccept(int portId, FactoryItem item) => false;

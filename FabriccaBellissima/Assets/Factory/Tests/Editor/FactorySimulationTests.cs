@@ -28,9 +28,9 @@ namespace FabriccaBellissima.Factory.Tests
             FactoryScenario scenario = EmptyScenario();
             scenario.nodes.Add(Belt(10, 2, 2, 1));
             scenario.nodes.Add(Belt(20, 4, 2, 2));
-            scenario.nodes.Add(new FactoryNodeConfig
+            scenario.nodes.Add(new SinkNodeConfig
             {
-                nodeId = 30, displayName = "Sink", kind = FactoryNodeKind.Sink, enabled = true, colorId = "Blue"
+                nodeId = 30, displayName = "Sink", enabled = true, acceptedColorId = "Blue"
             });
             scenario.connections.Add(Connection(10, FactoryPorts.Output, 20, FactoryPorts.Input));
             scenario.connections.Add(Connection(20, FactoryPorts.Output, 30, FactoryPorts.Input));
@@ -196,7 +196,7 @@ namespace FabriccaBellissima.Factory.Tests
         {
             FactoryScenario scenario = EmptyScenario();
             scenario.nodes.Add(Belt(10, 2, 2, 2));
-            scenario.nodes.Add(new FactoryNodeConfig { nodeId = 20, displayName = "Sink", kind = FactoryNodeKind.Sink, enabled = true });
+            scenario.nodes.Add(new SinkNodeConfig { nodeId = 20, displayName = "Sink", enabled = true });
             scenario.connections.Add(Connection(10, FactoryPorts.Output, 20, FactoryPorts.Input));
             scenario.initialStates.Add(new FactoryNodeInitialState
             {
@@ -371,9 +371,9 @@ namespace FabriccaBellissima.Factory.Tests
                 FactoryDemoAuthoring authoring = gameObject.AddComponent<FactoryDemoAuthoring>();
                 authoring.ResetToDefaults();
                 FactoryScenario scenario = authoring.CompileScenario();
-                Assert.That(scenario.nodes.Single(node => node.nodeId == 10).durationTicks, Is.EqualTo(40));
-                Assert.That(scenario.nodes.Single(node => node.nodeId == 30).durationTicks, Is.EqualTo(120));
-                FactoryNodeConfig belt = scenario.nodes.Single(node => node.nodeId == 20);
+                Assert.That(((ExtractorNodeConfig)scenario.nodes.Single(node => node.nodeId == 10)).durationTicks, Is.EqualTo(40));
+                Assert.That(((ExtractorNodeConfig)scenario.nodes.Single(node => node.nodeId == 30)).durationTicks, Is.EqualTo(120));
+                ConveyorNodeConfig belt = (ConveyorNodeConfig)scenario.nodes.Single(node => node.nodeId == 20);
                 Assert.That(belt.lengthUnits, Is.EqualTo(4000));
                 Assert.That(belt.movementPerTick, Is.EqualTo(50));
                 Assert.That(belt.spacingUnits, Is.EqualTo(1000));
@@ -399,14 +399,14 @@ namespace FabriccaBellissima.Factory.Tests
             scenario.nodes.Add(Belt(40, 4, 4, 4));
             scenario.nodes.Add(Furnace(50, 6, 2));
             scenario.nodes.Add(Belt(60, 4, 4, 4));
-            FactoryNodeConfig paint = Extractor(70, FactoryResourceType.PaintCan, 2);
+            ExtractorNodeConfig paint = Extractor(70, FactoryResourceType.PaintCan, 2);
             paint.paintCanCharges = 3;
             paint.colorId = "Blue";
             scenario.nodes.Add(paint);
             scenario.nodes.Add(Belt(80, 4, 4, 4));
             scenario.nodes.Add(Coloring(90, 1, 2));
             scenario.nodes.Add(Belt(100, 4, 4, 4));
-            scenario.nodes.Add(new FactoryNodeConfig { nodeId = 110, displayName = "Sink", kind = FactoryNodeKind.Sink, enabled = true });
+            scenario.nodes.Add(new SinkNodeConfig { nodeId = 110, displayName = "Sink", enabled = true });
             scenario.connections.AddRange(new[]
             {
                 Connection(10, 20, 20, 10), Connection(20, 20, 50, 10),
@@ -424,7 +424,7 @@ namespace FabriccaBellissima.Factory.Tests
             scenario.nodes.Add(Belt(10, 3, 3, 3));
             scenario.nodes.Add(Belt(20, 2, 2, 2));
             scenario.nodes.Add(Coloring(30, 1, 2));
-            scenario.nodes.Add(new FactoryNodeConfig { nodeId = 40, displayName = "Sink", kind = FactoryNodeKind.Sink, enabled = true });
+            scenario.nodes.Add(new SinkNodeConfig { nodeId = 40, displayName = "Sink", enabled = true });
             scenario.connections.Add(Connection(10, FactoryPorts.Output, 30, FactoryPorts.ColoringBar));
             scenario.connections.Add(Connection(20, FactoryPorts.Output, 30, FactoryPorts.ColoringCan));
             scenario.connections.Add(Connection(30, FactoryPorts.ColoringOutput, 40, FactoryPorts.Input));
@@ -449,25 +449,25 @@ namespace FabriccaBellissima.Factory.Tests
         {
             tickDurationMicroseconds = 50000, nextItemId = 1
         };
-        private static FactoryNodeConfig Extractor(int id, FactoryResourceType resource, int duration) => new FactoryNodeConfig
+        private static ExtractorNodeConfig Extractor(int id, FactoryResourceType resource, int duration) => new ExtractorNodeConfig
         {
-            nodeId = id, displayName = "Extractor", kind = FactoryNodeKind.Extractor, enabled = true,
+            nodeId = id, displayName = "Extractor", enabled = true,
             resource = resource, durationTicks = duration, colorId = "Blue", paintCanCharges = 3
         };
-        private static FactoryNodeConfig Belt(int id, int length, int movement, int capacity) => new FactoryNodeConfig
+        private static ConveyorNodeConfig Belt(int id, int length, int movement, int capacity) => new ConveyorNodeConfig
         {
-            nodeId = id, displayName = "Belt", kind = FactoryNodeKind.Conveyor, enabled = true,
+            nodeId = id, displayName = "Belt", enabled = true,
             lengthUnits = length, movementPerTick = movement, capacity = capacity,
             spacingUnits = Math.Max(1, length / capacity)
         };
-        private static FactoryNodeConfig Furnace(int id, int burn, int smelt) => new FactoryNodeConfig
+        private static FurnaceNodeConfig Furnace(int id, int burn, int smelt) => new FurnaceNodeConfig
         {
-            nodeId = id, displayName = "Furnace", kind = FactoryNodeKind.Furnace, enabled = true,
+            nodeId = id, displayName = "Furnace", enabled = true,
             burnTicks = burn, smeltTicks = smelt
         };
-        private static FactoryNodeConfig Coloring(int id, int spray, int chargesPerBar) => new FactoryNodeConfig
+        private static ColoringStationNodeConfig Coloring(int id, int spray, int chargesPerBar) => new ColoringStationNodeConfig
         {
-            nodeId = id, displayName = "Coloring", kind = FactoryNodeKind.ColoringStation, enabled = true,
+            nodeId = id, displayName = "Coloring", enabled = true,
             colorId = "Blue", sprayTicks = spray, chargesPerBar = chargesPerBar
         };
         private static FactoryConnection Connection(int source, int sourcePort, int destination, int destinationPort) =>

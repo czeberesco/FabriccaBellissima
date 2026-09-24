@@ -2,14 +2,14 @@ using System;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class FurnaceNodeFactory : IFactoryNodeFactory
+    public sealed class FurnaceNodeFactory : FactoryNodeFactory<FurnaceNodeConfig>
     {
-        public FactoryNodeKind Kind => FactoryNodeKind.Furnace;
-        public void Validate(FactoryNodeConfig config)
+        public override FactoryNodeKind Kind => FactoryNodeKind.Furnace;
+        protected override void Validate(FurnaceNodeConfig config)
         {
             if (config.burnTicks <= 0 || config.smeltTicks <= 0)
                 throw new ArgumentException($"Furnace {config.nodeId} durations must be positive.");
         }
-        public IFactoryNode Create(FactoryNodeConfig config) => new FurnaceNode(config);
+        protected override IFactoryNode Create(FurnaceNodeConfig config) => new FurnaceNode(config);
     }
 }

@@ -11,7 +11,7 @@ namespace FabriccaBellissima.Factory
         public int tickDurationMicroseconds = 50000;
         public long initialTick;
         public long nextItemId = 1;
-        public List<FactoryNodeConfig> nodes = new List<FactoryNodeConfig>();
+        [SerializeReference] public List<FactoryNodeConfig> nodes = new List<FactoryNodeConfig>();
         public List<FactoryConnection> connections = new List<FactoryConnection>();
         public List<FactoryNodeInitialState> initialStates = new List<FactoryNodeInitialState>();
 

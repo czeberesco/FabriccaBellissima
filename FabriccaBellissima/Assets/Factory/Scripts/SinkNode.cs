@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class SinkNode : FactoryNodeBase
+    public sealed class SinkNode : FactoryNodeBase<SinkNodeConfig>
     {
         private readonly SortedDictionary<string, int> _countsByColor =
             new SortedDictionary<string, int>(StringComparer.Ordinal);
         private readonly List<long> _consumedItemIds = new List<long>();
 
-        public SinkNode(FactoryNodeConfig config) : base(config) { }
+        public SinkNode(SinkNodeConfig config) : base(config) { }
         public override void LocalUpdate(FactoryTickContext context) { }
         public override bool TryGetOutput(out FactoryOutputProposal proposal) { proposal = default; return false; }
 
         public override bool CanAccept(int portId, FactoryItem item) => Enabled && portId == FactoryPorts.Input &&
             item != null && item.resource == FactoryResourceType.PaintedIronBar &&
-            string.Equals(item.colorId, Config.colorId, StringComparison.Ordinal);
+            string.Equals(item.colorId, Config.acceptedColorId, StringComparison.Ordinal);
 
         public override void Accept(int portId, FactoryItem item, FactoryTickContext context)
         {
@@ -37,6 +37,7 @@ namespace FabriccaBellissima.Factory
         public override FactoryNodeSnapshot CreateSnapshot()
         {
             FactoryNodeSnapshot snapshot = CreateCommonSnapshot($"Consumed {_consumedItemIds.Count}");
+            snapshot.configuredColorId = Config.acceptedColorId;
             snapshot.sinkTotal = _consumedItemIds.Count;
             foreach (KeyValuePair<string, int> entry in _countsByColor)
             {

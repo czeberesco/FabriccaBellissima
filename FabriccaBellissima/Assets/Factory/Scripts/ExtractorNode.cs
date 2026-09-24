@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class ExtractorNode : FactoryNodeBase
+    public sealed class ExtractorNode : FactoryNodeBase<ExtractorNodeConfig>
     {
         private int _workProgress;
         private FactoryItem _outputItem;
 
-        public ExtractorNode(FactoryNodeConfig config) : base(config) { }
+        public ExtractorNode(ExtractorNodeConfig config) : base(config) { }
 
         public override void LocalUpdate(FactoryTickContext context)
         {
@@ -58,6 +58,10 @@ namespace FabriccaBellissima.Factory
         public override FactoryNodeSnapshot CreateSnapshot()
         {
             FactoryNodeSnapshot snapshot = CreateCommonSnapshot(_outputItem != null ? "Output blocked" : "Extracting");
+            snapshot.configuredResource = Config.resource;
+            snapshot.configuredColorId = Config.colorId;
+            snapshot.durationTicks = Config.durationTicks;
+            snapshot.paintCanCharges = Config.paintCanCharges;
             snapshot.workProgress = _workProgress;
             snapshot.workRequired = Config.durationTicks;
             snapshot.outputItem = Clone(_outputItem);

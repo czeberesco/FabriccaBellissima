@@ -10,11 +10,10 @@ namespace FabriccaBellissima.Factory.Tests
         {
             var registry = new FactoryNodeFactoryRegistry(new IFactoryNodeFactory[] { new TestNodeFactory() });
             var scenario = new FactoryScenario();
-            scenario.nodes.Add(new FactoryNodeConfig
+            scenario.nodes.Add(new TestNodeConfig
             {
                 nodeId = 1,
                 displayName = "Extension",
-                kind = TestNodeFactory.TestKind,
                 enabled = true
             });
 
@@ -33,6 +32,47 @@ namespace FabriccaBellissima.Factory.Tests
                 new TestNodeFactory(),
                 new TestNodeFactory()
             }));
+        }
+
+        [Test]
+        public void FactoryRejectsWrongConfigurationTypeForDeclaredKind()
+        {
+            var config = new ExtractorNodeConfig
+            {
+                nodeId = 1,
+                displayName = "Mismatched",
+                durationTicks = 1,
+                resource = FactoryResourceType.IronOre,
+                kind = FactoryNodeKind.Furnace
+            };
+
+            var registry = FactoryNodeFactoryRegistry.CreateDefault();
+            ArgumentException exception = Assert.Throws<ArgumentException>(() => registry.Validate(config));
+            Assert.That(exception.Message, Does.Contain(nameof(FurnaceNodeConfig)));
+        }
+
+        [Test]
+        public void ScenarioSerializationPreservesConcreteNodeConfiguration()
+        {
+            var scenario = new FactoryScenario();
+            scenario.nodes.Add(new FurnaceNodeConfig
+            {
+                nodeId = 10,
+                displayName = "Furnace",
+                burnTicks = 8,
+                smeltTicks = 3
+            });
+
+            string json = scenario.ToJson(false);
+            FactoryScenario restored = FactoryScenario.FromJson(json);
+
+            Assert.That(restored.nodes, Has.Count.EqualTo(1));
+            Assert.That(restored.nodes[0], Is.TypeOf<FurnaceNodeConfig>());
+            var config = (FurnaceNodeConfig)restored.nodes[0];
+            Assert.That(config.burnTicks, Is.EqualTo(8));
+            Assert.That(config.smeltTicks, Is.EqualTo(3));
+            Assert.That(json, Does.Not.Contain("sprayTicks"));
+            Assert.That(json, Does.Not.Contain("chargesPerBar"));
         }
     }
 }

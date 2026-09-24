@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class ColoringStationNode : FactoryNodeBase
+    public sealed class ColoringStationNode : FactoryNodeBase<ColoringStationNodeConfig>
     {
         private int _appliedCharges;
         private int _sprayProgress;
@@ -12,7 +12,7 @@ namespace FabriccaBellissima.Factory
         private FactoryItem _workItem;
         private FactoryItem _waitingCan;
 
-        public ColoringStationNode(FactoryNodeConfig config) : base(config) { }
+        public ColoringStationNode(ColoringStationNodeConfig config) : base(config) { }
 
         public override void LocalUpdate(FactoryTickContext context)
         {
@@ -107,6 +107,9 @@ namespace FabriccaBellissima.Factory
             else if (_reservoirCharges == 0 && _waitingCan == null) status = "Waiting for paint";
             else status = "Spraying";
             FactoryNodeSnapshot snapshot = CreateCommonSnapshot(status);
+            snapshot.configuredColorId = Config.colorId;
+            snapshot.chargesPerBar = Config.chargesPerBar;
+            snapshot.sprayTicks = Config.sprayTicks;
             snapshot.workProgress = _sprayProgress;
             snapshot.workRequired = Config.sprayTicks;
             snapshot.reservoirCharges = _reservoirCharges;

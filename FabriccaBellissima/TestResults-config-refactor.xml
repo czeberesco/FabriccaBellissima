@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="20" result="Passed" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.1090065">
+  <test-suite type="TestSuite" id="1000" name="FabriccaBellissima" fullname="FabriccaBellissima" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.109007" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1023" name="FabriccaBellissima.Factory.Tests.dll" fullname="C:/Users/czebr/AppData/Local/Temp/FabriccaBellissimaConfigVerification/Library/ScriptAssemblies/FabriccaBellissima.Factory.Tests.dll" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.103650" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="57708" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1024" name="FabriccaBellissima" fullname="FabriccaBellissima" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.103162" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1025" name="Factory" fullname="FabriccaBellissima.Factory" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.102948" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1026" name="Tests" fullname="FabriccaBellissima.Factory.Tests" runstate="Runnable" testcasecount="20" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.102750" total="20" passed="20" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="FactoryArchitectureTests" fullname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" classname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.064599" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="DuplicateNodeFactoryRegistrationFailsClearly" fullname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests.DuplicateNodeFactoryRegistrationFailsClearly" methodname="DuplicateNodeFactoryRegistrationFailsClearly" classname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" runstate="Runnable" seed="2072111045" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.010797" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="FactoryRejectsWrongConfigurationTypeForDeclaredKind" fullname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests.FactoryRejectsWrongConfigurationTypeForDeclaredKind" methodname="FactoryRejectsWrongConfigurationTypeForDeclaredKind" classname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" runstate="Runnable" seed="2070734293" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.001685" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="RegisteredExtensionNodeRunsWithoutCentralSimulationChanges" fullname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests.RegisteredExtensionNodeRunsWithoutCentralSimulationChanges" methodname="RegisteredExtensionNodeRunsWithoutCentralSimulationChanges" classname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" runstate="Runnable" seed="291680452" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.010191" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="ScenarioSerializationPreservesConcreteNodeConfiguration" fullname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests.ScenarioSerializationPreservesConcreteNodeConfiguration" methodname="ScenarioSerializationPreservesConcreteNodeConfiguration" classname="FabriccaBellissima.Factory.Tests.FactoryArchitectureTests" runstate="Runnable" seed="42194368" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.031434" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1006" name="FactorySimulationTests" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.036899" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1017" name="BatchesAndResetProduceByteEquivalentCanonicalState" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.BatchesAndResetProduceByteEquivalentCanonicalState" methodname="BatchesAndResetProduceByteEquivalentCanonicalState" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="38457870" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.010398" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1021" name="CanonicalSnapshotContainsConfigurationConnectionsAndRejectsInvalidPorts" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.CanonicalSnapshotContainsConfigurationConnectionsAndRejectsInvalidPorts" methodname="CanonicalSnapshotContainsConfigurationConnectionsAndRejectsInvalidPorts" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="626484262" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.001850" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="CanSlotAndReservoirCoexist_NoEarlyOpenAndExactSprayDuration" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.CanSlotAndReservoirCoexist_NoEarlyOpenAndExactSprayDuration" methodname="CanSlotAndReservoirCoexist_NoEarlyOpenAndExactSprayDuration" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1807034296" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.001555" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="CoordinatorPlayPauseSingleStepAndResetUseTheAuthoritativePath" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.CoordinatorPlayPauseSingleStepAndResetUseTheAuthoritativePath" methodname="CoordinatorPlayPauseSingleStepAndResetUseTheAuthoritativePath" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="604510664" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.003764" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="DefaultAuthoringConversionsMatchDocumentedValues" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.DefaultAuthoringConversionsMatchDocumentedValues" methodname="DefaultAuthoringConversionsMatchDocumentedValues" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1815119499" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.008726" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="DisablePauseAndResetPreserveProgressAndAllocator" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.DisablePauseAndResetPreserveProgressAndAllocator" methodname="DisablePauseAndResetPreserveProgressAndAllocator" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1077236862" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000558" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="EndToEndProduction_ConservesResourcesAndConsumesPaintedBars" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.EndToEndProduction_ConservesResourcesAndConsumesPaintedBars" methodname="EndToEndProduction_ConservesResourcesAndConsumesPaintedBars" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="885689807" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000592" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="FinishedBlockedPaintedBarConsumesNoAdditionalPaint" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.FinishedBlockedPaintedBarConsumesNoAdditionalPaint" methodname="FinishedBlockedPaintedBarConsumesNoAdditionalPaint" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="442052751" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000328" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="FullBelt_BlocksEntranceAndRetainsExactOutputIdentityUntilRecovery" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.FullBelt_BlocksEntranceAndRetainsExactOutputIdentityUntilRecovery" methodname="FullBelt_BlocksEntranceAndRetainsExactOutputIdentityUntilRecovery" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1897846681" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.002281" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="Furnace_StarvationPreservesProgressAndFuelBurnsWhileIdleOrBlocked" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.Furnace_StarvationPreservesProgressAndFuelBurnsWhileIdleOrBlocked" methodname="Furnace_StarvationPreservesProgressAndFuelBurnsWhileIdleOrBlocked" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="740811509" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000433" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="Furnace_UsesLastFuelTickAndIgnitesQueuedCoalWithoutGap" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.Furnace_UsesLastFuelTickAndIgnitesQueuedCoalWithoutGap" methodname="Furnace_UsesLastFuelTickAndIgnitesQueuedCoalWithoutGap" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1524129947" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000338" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="NewlyTransferredItemCannotMoveOrTransferAgainUntilNextTick" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.NewlyTransferredItemCannotMoveOrTransferAgainUntilNextTick" methodname="NewlyTransferredItemCannotMoveOrTransferAgainUntilNextTick" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="147153347" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000351" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="PositiveDurationCompletesInExactlyNEligibleIntervals" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.PositiveDurationCompletesInExactlyNEligibleIntervals" methodname="PositiveDurationCompletesInExactlyNEligibleIntervals" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="538522468" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000199" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1020" name="StableNodeOrderControlsSimultaneousIdsAndCanonicalScenarioOrdering" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.StableNodeOrderControlsSimultaneousIdsAndCanonicalScenarioOrdering" methodname="StableNodeOrderControlsSimultaneousIdsAndCanonicalScenarioOrdering" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="989510611" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.001271" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="TwoCansPaintExactlyThreeBars_AndMissingSecondCanWaitsHalfway" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.TwoCansPaintExactlyThreeBars_AndMissingSecondCanWaitsHalfway" methodname="TwoCansPaintExactlyThreeBars_AndMissingSecondCanWaitsHalfway" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="1641664615" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000997" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="WrongResourceIsRejected_AndSinkConsumesValidBarImmediately" fullname="FabriccaBellissima.Factory.Tests.FactorySimulationTests.WrongResourceIsRejected_AndSinkConsumesValidBarImmediately" methodname="WrongResourceIsRejected_AndSinkConsumesValidBarImmediately" classname="FabriccaBellissima.Factory.Tests.FactorySimulationTests" runstate="Runnable" seed="624593915" result="Passed" start-time="2026-09-24 15:27:54Z" end-time="2026-09-24 15:27:54Z" duration="0.000754" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/czebr/AppData/LocalLow/DefaultCompany/FabriccaBellissima\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

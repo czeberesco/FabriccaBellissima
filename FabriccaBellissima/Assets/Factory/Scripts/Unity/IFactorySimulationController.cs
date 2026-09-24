@@ -9,6 +9,7 @@ namespace FabriccaBellissima.Factory
         float SimulationSpeed { get; }
         FactorySnapshot CurrentSnapshot { get; }
         IReadOnlyList<FactoryNodeConfig> NodeConfigs { get; }
+        IReadOnlyList<FactoryNodeLayout> NodeLayouts { get; }
         Observable<FactorySnapshot> Snapshots { get; }
         void StepOneTick();
         void StepTicks(int count);

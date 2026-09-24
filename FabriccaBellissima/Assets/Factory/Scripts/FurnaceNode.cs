@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace FabriccaBellissima.Factory
 {
-    public sealed class FurnaceNode : FactoryNodeBase
+    public sealed class FurnaceNode : FactoryNodeBase<FurnaceNodeConfig>
     {
         private int _workProgress;
         private int _fuelRemaining;
         private FactoryItem _workItem;
         private FactoryItem _waitingCoal;
 
-        public FurnaceNode(FactoryNodeConfig config) : base(config) { }
+        public FurnaceNode(FurnaceNodeConfig config) : base(config) { }
 
         public override void LocalUpdate(FactoryTickContext context)
         {
@@ -96,6 +96,7 @@ namespace FabriccaBellissima.Factory
             else if (_fuelRemaining == 0 && _waitingCoal == null) status = "Waiting for fuel";
             else status = "Smelting";
             FactoryNodeSnapshot snapshot = CreateCommonSnapshot(status);
+            snapshot.burnTicks = Config.burnTicks;
             snapshot.workProgress = _workProgress;
             snapshot.workRequired = Config.smeltTicks;
             snapshot.fuelRemaining = _fuelRemaining;
