@@ -250,6 +250,10 @@ namespace FabriccaBellissima.Factory.Tests
             try
             {
                 FactorySimulationCoordinator coordinator = gameObject.AddComponent<FactorySimulationCoordinator>();
+                FactoryDemoAuthoring authoring = gameObject.AddComponent<FactoryDemoAuthoring>();
+                coordinator.Construct(authoring, new FactorySimulationFactory(
+                    FactoryNodeFactoryRegistry.CreateDefault(), new FactoryTransferResolver(),
+                    new FactorySnapshotBuilder()));
                 FactoryScenario scenario = EmptyScenario();
                 scenario.nodes.Add(Extractor(10, FactoryResourceType.IronOre, 2));
                 coordinator.Initialize(scenario);

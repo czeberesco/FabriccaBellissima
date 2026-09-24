@@ -2,7 +2,8 @@
   "name": "FabriccaBellissima.Factory.Tests",
   "rootNamespace": "FabriccaBellissima.Factory.Tests",
   "references": [
-    "FabriccaBellissima.Factory"
+    "FabriccaBellissima.Factory",
+    "FabriccaBellissima.Factory.Unity"
   ],
   "includePlatforms": [
     "Editor"

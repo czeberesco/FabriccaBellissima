@@ -5,15 +5,6 @@ using UnityEngine;
 
 namespace FabriccaBellissima.Factory
 {
-    [Serializable]
-    public sealed class FactoryNodeLayout
-    {
-        public int nodeId;
-        public Vector3 position;
-        public Vector3 beltStart;
-        public Vector3 beltEnd;
-    }
-
     public sealed class FactoryDemoAuthoring : MonoBehaviour
     {
         public const int DistanceUnitsPerWorldUnit = 1000;

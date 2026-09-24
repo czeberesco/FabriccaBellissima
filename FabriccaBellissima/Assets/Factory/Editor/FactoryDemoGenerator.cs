@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace FabriccaBellissima.FactoryEditor
 {
@@ -11,11 +12,14 @@ namespace FabriccaBellissima.FactoryEditor
     {
         private const string GeneratedFolder = "Assets/Factory/Generated";
         private const string ScenePath = "Assets/Scenes/MainGameScene.unity";
+        private const string ResourcesFolder = "Assets/Resources";
+        private const string ProjectContextPath = "Assets/Resources/ProjectContext.prefab";
 
         [MenuItem("Tools/Fabbrica Bellissima/Generate Complete Demo")]
         public static void GenerateCompleteDemo()
         {
             EnsureFolder();
+            CreateProjectContext();
             CreateMaterials();
             CreatePrefabs();
 
@@ -27,8 +31,13 @@ namespace FabriccaBellissima.FactoryEditor
             authoring.ResetToDefaults();
             File.WriteAllText($"{GeneratedFolder}/DefaultScenario.json", authoring.CompileScenario().ToJson(true));
             AssetDatabase.ImportAsset($"{GeneratedFolder}/DefaultScenario.json", ImportAssetOptions.ForceUpdate);
-            systems.AddComponent<FactorySimulationCoordinator>();
-            systems.AddComponent<FactoryPresentation>();
+            FactorySimulationCoordinator coordinator = systems.AddComponent<FactorySimulationCoordinator>();
+            FactoryPresentation presentation = systems.AddComponent<FactoryPresentation>();
+            FactoryControlPanel controlPanel = systems.AddComponent<FactoryControlPanel>();
+            FactorySceneInstaller installer = systems.AddComponent<FactorySceneInstaller>();
+            installer.Configure(authoring, coordinator, presentation, controlPanel);
+            SceneContext sceneContext = systems.AddComponent<SceneContext>();
+            sceneContext.Installers = new MonoInstaller[] { installer };
 
             CreateEnvironment();
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -54,6 +63,11 @@ namespace FabriccaBellissima.FactoryEditor
             if (authoring == null || coordinator == null || presentation == null || camera == null)
                 throw new MissingReferenceException("Generated demo scene is missing a required factory component or camera.");
 
+            var registry = FactoryNodeFactoryRegistry.CreateDefault();
+            var simulationFactory = new FactorySimulationFactory(registry,
+                new FactoryTransferResolver(), new FactorySnapshotBuilder());
+            coordinator.Construct(authoring, simulationFactory);
+            presentation.Construct(coordinator);
             coordinator.Initialize(authoring.CompileScenario());
             presentation.SendMessage("Start", SendMessageOptions.RequireReceiver);
 
@@ -80,6 +94,19 @@ namespace FabriccaBellissima.FactoryEditor
         {
             if (!AssetDatabase.IsValidFolder(GeneratedFolder))
                 AssetDatabase.CreateFolder("Assets/Factory", "Generated");
+        }
+
+        private static void CreateProjectContext()
+        {
+            if (!AssetDatabase.IsValidFolder(ResourcesFolder))
+                AssetDatabase.CreateFolder("Assets", "Resources");
+
+            GameObject root = new GameObject("ProjectContext");
+            ProjectContext context = root.AddComponent<ProjectContext>();
+            FactoryProjectInstaller installer = root.AddComponent<FactoryProjectInstaller>();
+            context.Installers = new MonoInstaller[] { installer };
+            PrefabUtility.SaveAsPrefabAsset(root, ProjectContextPath);
+            Object.DestroyImmediate(root);
         }
 
         private static void CreateMaterials()

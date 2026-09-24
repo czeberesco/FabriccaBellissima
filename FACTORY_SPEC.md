@@ -1,12 +1,14 @@
 # Factory Simulation Specification
 
-Status: **Approved for implementation on 2026-09-23.**
+Status: **Approved for implementation on 2026-09-23; modular architecture amendment approved on 2026-09-24.**
 
-This document captures the authoritative requirements for the MonoBehaviour reference factory. It is derived from the supplied `Unity_Factory_MonoBehaviour_Prompt.txt`, treated as specification input rather than an instruction to implement during the current review phase.
+This document captures the authoritative requirements for the object-oriented reference factory. It originated from the supplied `Unity_Factory_MonoBehaviour_Prompt.txt` and now includes the approved modular architecture amendment. Implementation is authorized under this complete contract.
 
 ## 1. Goal and non-goals
 
-Create a complete, playable 3D factory diorama whose logical results can later serve as the reference for a DOTS port. The reference implementation uses MonoBehaviours and ordinary C# state only, while exposing implementation-neutral scenarios, snapshots, and events suitable for exact per-tick comparison.
+Create a complete, playable 3D factory diorama whose logical results can later serve as the reference for a DOTS port. The reference implementation uses modular object-oriented C# domain/application code with MonoBehaviour adapters, while exposing implementation-neutral scenarios, snapshots, and events suitable for exact per-tick comparison.
+
+The implementation must also be a maintainable foundation for additional resources, machines, transports, scenarios, and presentation features. Extensibility and SOLID responsibility boundaries are first-class requirements; future DOTS portability must not force the object-oriented implementation into a monolithic, data-switch-driven design.
 
 The scene should evoke Factorio/Satisfactory with a raised orthographic camera, primitive models, visible production, moving items, readable status, and controls. It does not include a player character, building/construction flow, inventories, crafting menus, persistence, complex physics, splitters, mergers, or routing.
 
@@ -20,8 +22,68 @@ Authoritative item movement and transfer must not depend on Rigidbody collisions
 - URP: `17.3.0`.
 - Unity Test Framework: `1.6.0`.
 - Starting scene: `FabriccaBellissima/Assets/Scenes/MainGameScene.unity`.
-- Use built-in features and primitive geometry; add no paid assets, external downloads, or unnecessary packages.
+- Use built-in features and primitive geometry; add no paid assets, unapproved external downloads, or unnecessary packages.
+- Extenject and R3 by Cysharp are required. Install compatible pinned versions, commit the resulting manifest/lock changes, and document the exact versions and package sources. They are infrastructure dependencies and must not leak into the authoritative domain model.
 - Prefix non-public instance fields with `_`.
+
+## 2.1 Target architecture
+
+The refactor must replace the current centralized simulation implementation with cohesive modules whose dependencies point inward:
+
+```text
+Unity presentation / input / player-loop adapters
+                    |
+          Extenject composition roots
+                    |
+      Application orchestration and ports
+                    |
+      Deterministic factory domain model
+```
+
+The deterministic domain contains items, node state and behavior, ports, transfer proposals, accounting rules, and domain events. It has no knowledge of MonoBehaviour, GameObject, transforms, Extenject, R3, frame time, or presentation.
+
+The application layer owns the simulation session, ordered tick pipeline, reset, commands, scenario construction, canonical snapshot/event export, and interfaces used by outer adapters. It depends on domain abstractions and explicit injected collaborators.
+
+Infrastructure and presentation adapt Unity authoring, JSON, the player loop, controls, and visuals to application interfaces. Extenject performs composition; R3 represents recurring player-loop work and observable view/control flows. Neither library may define authoritative simulation semantics.
+
+### SOLID and extension rules
+
+- Each type has one cohesive reason to change. Scenario validation, node construction, tick orchestration, transfer resolution, event recording, snapshot mapping, serialization, scheduling, UI, and visual synchronization are separate responsibilities.
+- Node behavior is polymorphic behind small contracts for local tick work, output proposal, input acceptance/commit, state reset, and snapshot/event contribution as appropriate. Interfaces must remain capability-focused instead of becoming a single broad node interface merely mirroring the old god object.
+- A node factory/registry maps scenario node definitions to injected node factories. Adding a new node type requires adding and registering its module, configuration validation, serialization mapping, and tests; it must not require edits to central local-update, acceptance, removal, status, or snapshot switches.
+- Configuration and snapshots use stable common envelopes plus node-specific configuration/state DTOs and registered mappers. Do not grow universal records with unrelated optional fields for every future machine type. A serialized node-kind discriminator may select a registered factory, but it must not dispatch domain behavior through a central switch.
+- Presentation-specific node visuals and status formatting use registered presenters/formatters or node-neutral view models, so a new node does not require adding cases to a global presentation switch.
+- Stable ordering is supplied explicitly by IDs and deterministic comparers. Dependency-injection binding order, dictionary enumeration, subscription order, transform order, and reflection discovery never determine simulation outcomes.
+- Prefer composition and focused policies over deep inheritance. Do not introduce an ECS-like framework, a generic behavior graph, or abstractions without a current extension/test seam.
+
+### Source and assembly organization
+
+- Every independently meaningful class, struct, interface, enum, configuration record, state record, event, and snapshot type has its own correctly named source file. Catch-all source files are prohibited.
+- Tiny private nested types are permitted only when inseparable from one implementation and not independently meaningful. A type with its own contract, test surface, reuse potential, or domain name belongs in its own file.
+- Separate assemblies/folders at least by domain/application and Unity-facing infrastructure/presentation where this prevents outward dependencies. Test assemblies reference the narrowest relevant production assemblies. Circular assembly references are prohibited.
+- Namespace and folder names communicate feature and layer ownership. Avoid a flat directory of unrelated factory types.
+
+### Dependency injection and lifetime scopes
+
+No runtime singleton, mutable global state, service locator, static service accessor, `DontDestroyOnLoad` manager, or runtime scene/object search is allowed. Static immutable constants and pure stateless helpers are allowed and are not considered singletons.
+
+- `ProjectContext` is the composition root for genuinely application-wide, cross-scene services only. Such services are created through dedicated injected factories, then bound and injected at project scope with an explicit lifetime.
+- `SceneContext` is the composition root for the factory scene. It owns scene/session services such as scenario compilation/loading, simulation session creation, tick orchestration, R3 scheduling adapters, commands, UI presenters, and visual presenters.
+- A prefab or specific game object may use `GameObjectContext` with a local installer when it benefits from an isolated, reusable dependency graph. Do not add a local context to every object mechanically.
+- A closed prefab ecosystem may use serialized Inspector references between objects wholly owned by that prefab. Any dependency crossing that boundary is injected.
+- Prefer constructor injection for plain C# services and Extenject-supported injection methods for MonoBehaviours. Missing required bindings fail clearly during validation/startup; components must not fall back to `GetComponent`, `Find*Object*`, global access, or implicit construction.
+- Installers contain bindings, factories, configuration, and lifetime declarations only. Business rules and view behavior remain in their owning modules.
+- Every disposable service and R3 subscription has explicit ownership and is disposed with its `ProjectContext`, `SceneContext`, `GameObjectContext`, or component lifetime.
+
+### R3 boundary
+
+Use R3 for Unity player-loop scheduling, recurring view synchronization, UI/control command streams, and other non-authoritative reactive flows. Direct `Update`, `FixedUpdate`, or `LateUpdate` polling loops are prohibited when R3 provides the recurring mechanism. One-time Unity lifecycle hooks may bootstrap injected adapters but must not resolve dependencies or advance simulation state independently.
+
+R3 must not replace deterministic collection algorithms inside a tick. Authoritative node visitation, proposal gathering, sorting, transfer commits, snapshot ordering, validation, and accounting continue to use explicit ordinary C# iteration with specified comparers. R3 time, concurrency, operator scheduling, frame timing, and subscription ordering may never affect authoritative results.
+
+### Refactoring compatibility
+
+The architectural refactor must preserve the authoritative behavior in Sections 3–16. For every existing scenario and command schedule, tick-by-tick logical state, item identity, event content/order, counters, reset behavior, and canonical serialization remain equivalent. Capture characterization fixtures before replacing the monolith and run them against the modular implementation. Architecture improvements do not authorize simulation-rule changes.
 
 ## 3. Required topology
 
@@ -79,9 +141,9 @@ Paint cans carry a positive integer charge count and a paint color ID. Painted b
 - This explicit upward rounding is part of the scenario semantics. Snapshots include the converted integer values so another implementation need not reproduce floating-point conversion.
 - Render positions may be interpolated from integer progress, but rendered values never affect logic.
 
-### Coordinator and controls
+### Orchestrator, scheduling, and controls
 
-One MonoBehaviour simulation coordinator exposes `StepOneTick`. It owns the accumulator used only to decide how many whole ticks to request during Play. It supports:
+One application-level simulation orchestrator exposes `StepOneTick`. It is the sole owner of authoritative phase advancement. An injected Unity/R3 scheduling adapter owns the non-authoritative accumulator used only to decide how many whole ticks to request during Play. The command surface supports:
 
 - Play and Pause.
 - Reset to the exact initialized scenario state.
@@ -89,7 +151,7 @@ One MonoBehaviour simulation coordinator exposes `StepOneTick`. It owns the accu
 - Simulation speed controlling tick scheduling only; it never changes configured belt speed or machine durations.
 - Optional batched advancement that is exactly repeated `StepOneTick` calls and never changes results.
 
-The coordinator never drops/skips owed ticks as a catch-up shortcut. If a per-frame execution budget is used to keep the UI responsive, unexecuted ticks remain queued. Stations and belts never independently advance authoritative state.
+The scheduler never drops/skips owed ticks as a catch-up shortcut. If a per-frame execution budget is used to keep the UI responsive, unexecuted ticks remain queued. R3 subscriptions, stations, belts, presenters, and views never independently advance authoritative state.
 
 ## 6. Authoritative tick contract
 
@@ -256,12 +318,14 @@ The generated demo must be legible and playable without manual wiring:
 - Furnace and sprayer have active feedback.
 - A readable panel or world labels expose tick/play state, simulation speed, produced/consumed counters, belt count/capacity, work progress, fuel remaining, queued coal, reservoir color/charges, waiting can, bar paint progress, enabled state, and a specific wait/block reason.
 - Controls provide Play, Pause, Reset, Single Tick, simulation speed, and enable/disable toggles for individual nodes.
+- Presentation observes injected snapshot/status streams and command interfaces through R3. It does not poll a concrete coordinator from `LateUpdate` and does not locate dependencies at runtime.
+- UI formatting, visual object creation/pooling, item placement, material/status styling, and simulation control are separate focused collaborators where they have distinct reasons to change.
 
 Provide a saved demo scene, useful reusable prefabs, serialized connections, and materials. If assets cannot be generated directly, provide an idempotent Editor menu command that builds and saves them, document the exact menu click, and do not claim the assets exist until it has been executed successfully. Never fabricate Unity YAML.
 
 ## 14. Neutral scenario, snapshot, and events
 
-Keep scenario loading and canonical state extraction behind a small implementation-neutral interface that a later DOTS implementation can satisfy. The MonoBehaviour path remains the sole simulation used by gameplay and tests.
+Keep scenario loading and canonical state extraction behind small implementation-neutral interfaces that a later DOTS implementation can satisfy. Gameplay and integration tests use the same injected application/domain path; no simplified test-only simulator is allowed.
 
 ### Scenario format
 
@@ -275,6 +339,8 @@ Use a deterministic, versioned JSON-compatible data model containing:
 - belt length, movement, spacing, and capacity;
 - furnace, paint, and sink settings;
 - global initial tick, next item ID, counters, and optional explicit initial logical contents/state for adversarial tests.
+
+The serialized model uses a stable node envelope containing identity, type discriminator, enabled state, ports, and a versioned node-specific configuration payload. Serialization adapters translate DTOs to domain configuration; the domain does not depend on Unity `JsonUtility` or polymorphic Unity serialization. Unknown node types or payload versions fail clearly before live state is mutated.
 
 Serialized JSON field/array ordering is canonical. Loading validates all IDs, connections, values, payloads, ownership uniqueness, and progress bounds before mutating the live simulation.
 
@@ -291,6 +357,8 @@ The canonical snapshot includes every value capable of affecting future behavior
 - coloring bar slot/type/applied charges/color/partial spray progress, reservoir color/charges, and waiting can payload;
 - sink totals, counts by color, and consumed ID order;
 - raw production/consumption, transformation, and paint-charge accounting counters.
+
+Node snapshots likewise use a stable common envelope plus a versioned node-specific state payload produced by the registered node snapshot mapper. Consumers that do not understand a new node type can still read its common identity/port/enabled metadata or fail explicitly according to the requested export version; existing node payloads and canonical ordering remain stable.
 
 Sort nodes, ports, items, maps, and counters by stable ordinal IDs/keys. Exclude GameObject/component references, transforms used only for presentation, wall-clock timestamps, allocation addresses, and non-authoritative interpolation.
 
@@ -322,7 +390,7 @@ Conservation/accounting must allow tests to prove:
 
 ## 16. Required automated verification
 
-Tests use Unity Test Framework, run the same MonoBehaviour simulation path, and require no camera/presentation. Use small adversarial scenarios and exact intermediate snapshots, not throughput-only assertions.
+Tests use Unity Test Framework, run the same application/domain simulation path as play mode, and require no camera/presentation for domain behavior. Pure deterministic tests explicitly construct the required collaborators; composition tests validate the real Extenject roots. Use small adversarial scenarios and exact intermediate snapshots, not throughput-only assertions.
 
 1. End-to-end production and sink consumption with correct raw-resource and paint accounting.
 2. Full belts and blocked entrances never exceed capacity; stalled outputs preserve ID; unblocking recovers without loss/duplication.
@@ -337,14 +405,28 @@ Tests use Unity Test Framework, run the same MonoBehaviour simulation path, and 
 
 Also test duration boundaries (`N` work intervals complete in exactly `N` eligible ticks), deterministic simultaneous creation/transfer ordering, reset of the item-ID allocator, canonical ordering, and invalid scenario/configuration rejection.
 
+Architecture verification must additionally prove:
+
+1. ProjectContext and SceneContext validate with all required bindings, factories, lifetimes, and disposal ownership.
+2. Scene unload/reload creates a fresh scene session while intended project-scope services retain only their documented cross-scene state.
+3. Representative prefab-local composition validates when a GameObjectContext is used; closed prefab references do not escape their ownership boundary.
+4. A test-only node module can be registered and participate in ordered ticking/transfers without changing central orchestrator, transfer resolver, snapshot coordinator, or existing node implementations.
+5. Missing and duplicate node-factory registrations fail with clear deterministic errors.
+6. R3 play scheduling, pause, speed, backlog, and disposal preserve the existing tick contract and never lose owed ticks.
+7. Presentation receives changes reactively without advancing or mutating authoritative state.
+8. Runtime code contains no singleton/service-locator access, open-ecosystem `GetComponent` fallback, `Find*Object*` dependency lookup, or simulation/presentation polling lifecycle loop.
+
 ## 17. Delivery and acceptance
 
 Implementation is complete only when the repository contains:
 
-- the MonoBehaviour reference simulation and neutral scenario/snapshot interfaces;
+- the modular object-oriented reference simulation and neutral scenario/snapshot interfaces;
+- validated Extenject ProjectContext, SceneContext, dedicated service/node factories, and any justified prefab GameObjectContexts;
+- R3-based scheduling, UI command, and presentation-observation adapters with deterministic simulation iteration kept imperative;
+- cohesive domain, application, infrastructure, and presentation source organization with independently meaningful types in separate files;
 - the configured demo topology and presentation;
 - saved scene/prefabs/materials, or a verified idempotent generator plus exact invocation steps;
 - focused EditMode/PlayMode tests as appropriate;
 - a concise README covering startup, controls, file layout, tick/transfer boundary semantics, configuration units/rounding, generator steps if any, and honest verification status.
 
-Run available Unity compilation/tests, fix discovered failures, and report exact verification. If Unity cannot run in the execution environment, identify precisely what remains unverified and give the exact batch command or Editor steps needed. Code inspection alone must never be reported as successful verification.
+Run available Unity compilation/tests, Extenject container validation, and architecture checks; fix discovered failures and report exact verification. If Unity cannot run in the execution environment, identify precisely what remains unverified and give the exact batch command or Editor steps needed. Code inspection alone must never be reported as successful verification.

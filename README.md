@@ -1,6 +1,6 @@
 # Fabbrica Bellissima
 
-A deterministic MonoBehaviour factory reference implementation for Unity. The simulation is deliberately separated from presentation so a future DOTS port can be compared tick-for-tick against the same scenarios, snapshots, and events.
+A deterministic, modular object-oriented factory reference implementation for Unity. Plain C# node modules and application services are separated from Extenject composition, R3 scheduling, and presentation so new machine types can be registered without changing the central tick pipeline.
 
 ## Open and run
 
@@ -9,6 +9,8 @@ A deterministic MonoBehaviour factory reference implementation for Unity. The si
 3. Enter Play Mode.
 
 The demo scene and reusable generated assets are already saved. To rebuild them idempotently, click **Tools > Fabbrica Bellissima > Generate Complete Demo**. This rewrites the demo scene, default scenario JSON, materials, and prototype prefabs without manual wiring.
+
+The project pins Extenject `9.3.1` and R3 `1.3.1`. R3's Unity integration is installed through UPM; its official NuGet core assemblies and required BCL assemblies are committed under `Assets/Plugins/R3` because the Unity package intentionally does not contain them.
 
 ## Controls
 
@@ -24,7 +26,7 @@ World labels identify stable nodes and port roles. Resources use different shape
 
 ## Deterministic contract
 
-`FactorySimulationCoordinator.StepOneTick()` is the only authoritative advancement path. Machines and belts do not advance state independently.
+`FactorySimulationCoordinator.StepOneTick()` delegates to the single application simulation orchestrator and is the only authoritative advancement path. Machines and belts do not advance state independently. R3 observes the Unity player loop only to schedule whole tick requests and publish presentation snapshots; deterministic in-tick traversal remains explicit ordinary C# iteration.
 
 Each tick has three phases:
 
@@ -49,13 +51,24 @@ Scenario JSON stores the tick duration as exact integer microseconds, along with
 ## File layout
 
 ```text
-Assets/Factory/Scripts/       deterministic model, authoring, coordinator, presentation
+Assets/Factory/Scripts/       deterministic core models, node modules/factories, and application services
+Assets/Factory/Scripts/Unity/ Extenject/R3 composition, Unity scheduling, controls, authoring, and presentation
 Assets/Factory/Editor/        idempotent demo generator
 Assets/Factory/Generated/     scenario JSON, materials, reusable prefabs
 Assets/Factory/Tests/Editor/  adversarial deterministic tests
 Assets/Factory/Tests/PlayMode saved-scene runtime smoke test
+Assets/Plugins/R3/            pinned official R3 NuGet runtime assemblies
+Assets/Resources/             Extenject ProjectContext prefab and project installer
 Assets/Scenes/MainGameScene.unity
 ```
+
+Extenject lifetime scopes are explicit:
+
+- `ProjectContext` owns stateless cross-scene node factories, their registry, transfer/snapshot services, and `IFactorySimulationFactory`.
+- `SceneContext` owns and injects the scene authoring, coordinator, R3-driven session, presentation, and control panel.
+- Prefabs remain closed ecosystems and may add `GameObjectContext` only when they acquire local services; the current primitive prototype prefabs do not need one.
+
+Runtime code does not use service locators, singleton managers, scene searches, or `GetComponent` dependency fallbacks. Every independently meaningful production type is in its own source file.
 
 `FACTORY_SPEC.md` is the authoritative behavior contract; `AGENTS.md` contains repository implementation rules and continuity guidance.
 
@@ -92,10 +105,10 @@ $env:UNITY_EDITOR = '/path/to/Unity'
 pwsh ./scripts/Run-UnityTests.ps1 -TestPlatform PlayMode
 ```
 
-Last verified on 2026-09-23 with Unity `6000.3.10f1`:
+Last verified on 2026-09-24 with Unity `6000.3.10f1`:
 
-- EditMode: 16 passed, 0 failed.
+- EditMode: 18 passed, 0 failed, including extension-node registration and duplicate-factory rejection.
 - PlayMode: 2 passed, 0 failed. This includes five deterministic 10,000-tick scenarios run 100 times each (5,000,000 total ticks), with scheduled three-to-six-node outages and exact canonical-state/trace comparison.
-- Demo generation: completed successfully and saved the scene/prefabs/materials.
+- Demo generation: completed successfully and saved the ProjectContext prefab, DI-wired scene, prefabs, and materials.
 
 When Unity is launched by a sandboxed automation agent, it must be allowed to run outside filesystem isolation so its Licensing Client, Package Manager, and AppData databases can operate. The Unity executable remains scoped to this project path.

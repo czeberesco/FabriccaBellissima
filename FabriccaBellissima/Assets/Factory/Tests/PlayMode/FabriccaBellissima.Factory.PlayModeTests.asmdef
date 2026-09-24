@@ -2,7 +2,8 @@
   "name": "FabriccaBellissima.Factory.PlayModeTests",
   "rootNamespace": "FabriccaBellissima.Factory.Tests",
   "references": [
-    "FabriccaBellissima.Factory"
+    "FabriccaBellissima.Factory",
+    "FabriccaBellissima.Factory.Unity"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

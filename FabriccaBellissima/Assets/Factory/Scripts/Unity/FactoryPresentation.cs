@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using R3;
 using UnityEngine;
+using Zenject;
 
 namespace FabriccaBellissima.Factory
 {
     public sealed class FactoryPresentation : MonoBehaviour
     {
-        [SerializeField] private FactorySimulationCoordinator _coordinator;
         [SerializeField] private bool _showWorldLabels = true;
 
         private readonly Dictionary<int, FactoryNodeConfig> _configs = new Dictionary<int, FactoryNodeConfig>();
@@ -18,23 +20,29 @@ namespace FabriccaBellissima.Factory
         private Transform _visualRoot;
         private Material _machineMaterial;
         private Material _beltMaterial;
+        private IFactorySimulationController _controller;
+        private IDisposable _snapshotSubscription;
+
+        [Inject]
+        public void Construct(IFactorySimulationController controller) =>
+            _controller = controller ?? throw new ArgumentNullException(nameof(controller));
 
         private void Start()
         {
-            if (_coordinator == null) _coordinator = GetComponent<FactorySimulationCoordinator>();
-            if (_coordinator == null || _coordinator.Simulation == null)
+            if (_controller == null || _controller.CurrentSnapshot == null)
             {
                 enabled = false;
                 return;
             }
 
             BuildPresentation();
-            SyncPresentation();
+            SyncPresentation(_controller.CurrentSnapshot);
+            _snapshotSubscription = _controller.Snapshots.Subscribe(SyncPresentation);
         }
 
-        private void LateUpdate()
+        private void OnDestroy()
         {
-            if (_coordinator?.Simulation != null) SyncPresentation();
+            _snapshotSubscription?.Dispose();
         }
 
         private void BuildPresentation()
@@ -44,7 +52,7 @@ namespace FabriccaBellissima.Factory
             _machineMaterial = CreateMaterial("Machine", new Color(0.18f, 0.28f, 0.35f));
             _beltMaterial = CreateMaterial("Belt", new Color(0.08f, 0.1f, 0.12f));
 
-            foreach (FactoryNodeConfig config in _coordinator.Simulation.NodeConfigs)
+            foreach (FactoryNodeConfig config in _controller.NodeConfigs)
             {
                 _configs.Add(config.nodeId, config);
                 if (config.kind == FactoryNodeKind.Conveyor) CreateBelt(config);
@@ -118,9 +126,8 @@ namespace FabriccaBellissima.Factory
             _labels.Add(config.nodeId, text);
         }
 
-        private void SyncPresentation()
+        private void SyncPresentation(FactorySnapshot snapshot)
         {
-            FactorySnapshot snapshot = _coordinator.CurrentSnapshot;
             if (snapshot == null) return;
             var visibleIds = new HashSet<long>();
 
